@@ -1,0 +1,26 @@
+Open R1, R2, R3, R4 files at once
+extract sequence lines from R2 and R3
+call reverse compliment function on R3
+(if)check if any of the sequences contain N
+    write the corresponding read pair records (4 lines of fastq) into the unknown file
+
+(elif)compare if the indexes are the same
+    write the corresponding read pair records (4 lines of fastq) into the matching file
+
+(else) indexes are not the same 
+    write into index-hopping file
+
+To report the number properly read pairs matched indexes, index-hopping observed, and
+read-pairs with unknown index(es), count the number of sequencing lines in each corresponding file
+I am not sure if we are supposed to devide the result by 2 because we are reporting it 
+for 'read-pair'
+
+I will have a function that reverse compliments a given sequence
+save the complimentary base combinations in a dictionary
+Read the reverse compliment index from the end, convert bases
+using the dictionary to look up complimentary bases,
+join into a resulting string
+
+Another function will handle writing into a file
+
+
