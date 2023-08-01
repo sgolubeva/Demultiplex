@@ -5,10 +5,10 @@
 
 | File name | label | Read length | Phred encoding |
 |---|---|---|---|
-| 1294_S1_L008_R1_001.fastq.gz |  |  |  |
-| 1294_S1_L008_R2_001.fastq.gz |  |  |  |
-| 1294_S1_L008_R3_001.fastq.gz |  |  |  |
-| 1294_S1_L008_R4_001.fastq.gz |  |  |  |
+| 1294_S1_L008_R1_001.fastq.gz | histR1.png |101  | Phred+33  |
+| 1294_S1_L008_R2_001.fastq.gz | histR2.png | 8 | Phred+33 |
+| 1294_S1_L008_R3_001.fastq.gz | histR3.png | 8 | Phred+33 |
+| 1294_S1_L008_R4_001.fastq.gz | histR4.png | 101 | Phred+33 |
 
 2. Per-base NT distribution
     1. Use markdown to insert your 4 histograms here.
