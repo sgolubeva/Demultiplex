@@ -17,9 +17,20 @@ https://github.com/sgolubeva/Demultiplex/blob/master/Assignment-the-first/initia
    
     2. ![hist R1](histR1.png)
        
-    4. https://github.com/sgolubeva/Demultiplex/blob/master/Assignment-the-first/histR2.png
-    5. https://github.com/sgolubeva/Demultiplex/blob/master/Assignment-the-first/histR3.png
-    6. https://github.com/sgolubeva/Demultiplex/blob/master/Assignment-the-first/histR4.png
+   R2 histogram
+
+
+    ![hist_R2](histR2.png)
+
+    R3 histogram
+   
+    ![hist_R3](histR3.png)
+
+   R4 histogram
+
+    ![hist_R4](histR4.png)
+   
+   
        
     
 ## Part 2
