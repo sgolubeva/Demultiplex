@@ -12,9 +12,10 @@ https://github.com/sgolubeva/Demultiplex/blob/master/Assignment-the-first/initia
 | 1294_S1_L008_R4_001.fastq.gz | histR4.png | 101 | Phred+33 |
 
 2. Per-base NT distribution
-   Only after uploading, I realized that the titels of my histograms don't have a read number 
-    1st hist - R1, 2nd hist - R2, 3rd hist - R3, 4th hist - R4
-    2. https://github.com/sgolubeva/Demultiplex/blob/master/Assignment-the-first/histR1.png
+    
+    R1 histogram
+   
+    2. ![hist R1](histR1.png)
     3. https://github.com/sgolubeva/Demultiplex/blob/master/Assignment-the-first/histR2.png
     4. https://github.com/sgolubeva/Demultiplex/blob/master/Assignment-the-first/histR3.png
     5. https://github.com/sgolubeva/Demultiplex/blob/master/Assignment-the-first/histR4.png
