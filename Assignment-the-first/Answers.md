@@ -2,6 +2,7 @@
 
 ## Part 1
 1. Be sure to upload your Python script. Provide a link to it here:
+https://github.com/sgolubeva/Demultiplex/blob/master/Assignment-the-first/initial_data_exploration.py
 
 | File name | label | Read length | Phred encoding |
 |---|---|---|---|
@@ -11,9 +12,13 @@
 | 1294_S1_L008_R4_001.fastq.gz | histR4.png | 101 | Phred+33 |
 
 2. Per-base NT distribution
-    1. Use markdown to insert your 4 histograms here.
-    2. **YOUR ANSWER HERE**
-    3. **YOUR ANSWER HERE**
+   Only after uploading, I realized that the titels of my histograms don't have a read number 
+    1st hist - R1, 2nd hist - R2, 3rd hist - R3, 4th hist - R4
+    2. https://github.com/sgolubeva/Demultiplex/blob/master/Assignment-the-first/histR1.png
+    3. https://github.com/sgolubeva/Demultiplex/blob/master/Assignment-the-first/histR2.png
+    4. https://github.com/sgolubeva/Demultiplex/blob/master/Assignment-the-first/histR3.png
+    5. https://github.com/sgolubeva/Demultiplex/blob/master/Assignment-the-first/histR4.png
+       
     
 ## Part 2
 1. Define the problem
