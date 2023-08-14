@@ -1,0 +1,98 @@
+The goal of the multiplexing assignment is to sort through the indexes 
+in the sequencing data files and figure out if there are any index hopping events.
+
+Sequencing experiment was designed with dual indexes having the same index sequences
+on both sides of the incert. We can detect index hopping events by comraring R2 and R3
+sequences. If no index hopping happened, they should be reverse compliment of each other.
+
+If index hopping event happend, then the indexes won't much and the read should be separated 
+from the other reads.
+
+Additionally, we will look at the sequencing quality for the index reads and the biological 
+sample reads. For the index reads, we will look at the quality scores at each position and 
+see if they are falling below a threshhold. The threshhold is to be determined, but for now
+I am going to look at the range of all quality scores for the index read data and pick 25% 
+quality score. For the biological read data, I am going to find the average score for each 
+read and and determine if it falls below the threshold.
+
+Initial data exploration:
+
+1. Look which files contain biological and index sequences
+Command:
+head <file_name>
+
+|File   | Sequence| 
+|-------|---------|
+|1294_S1_L008_R1_001.fastq.gz| biological sequences Read 1|
+|1294_S1_L008_R2_001.fastq.gz| index 1|
+|1294_S1_L008_R3_001.fastq.gz| index 2
+|1294_S1_L008_R4_001.fastq.gz| biological sequences Read 2
+
+2. Check the length of the sequences 
+Command:
+
+zcat 1294_S1_L008_R2_001.fastq.gz |grep -A1  --no-group-separator '@'| grep -v '@' | head -1| wc -L
+
+Note there wc -L counts the number of the characters excluding \n 
+if you use wc or wc -c, it will include an extra charachter which is a new line
+
+Read 1 and 2 length is 101 charachters
+Index 1 and 2 length is 8 charachters
+
+3.I looked at which quality scores are present in the file to determine if it is Phred33 or Phred64
+
+Command:
+zcat 1294_S1_L008_R1_001.fastq.gz |grep -A1  --no-group-separator '+'| grep -v '+' | head -1| grep -o '.'
+
+Since there was '#' score present, I concluded that it is phred33 encoding 
+
+4. Check how many reads have N's in their sequences
+
+Command:
+zcat 1294_S1_L008_R2_001.fastq.gz| grep -A1  --no-group-separator '@'| grep -v '@' | grep -o 'N' -c
+|Read| Number|
+|----| ------|
+|R2 |3976613 sequences|
+|R3 |3328051 sequences|
+
+5. What is the good quality score cutoff for indexes and biological reads?
+
+Q-score cutoff for biological reads: find and average q-score for a read. 
+I can conclude from my score distribution per position histograms that most q scores in my data are around 38
+The two worst q-scores are 30 and 35. I decided to average q-scores for a given read, and it it is lower or equal 30
+that would mean that the most scores on that read have very low numbers and should be discarded.
+
+Q-score cutoff for for index reads: I am thinking about two strategies and so far I can't decide which one is the best.
+One strategy is instead of averaging q-score for entire read, I would look at q-scores at each position.
+The lowest possible score in index reads is 2 which is '#'. Those positions will have Ns and will be discarded during the N
+check. I checked all possible q-scores in the indexing reads as follows:
+
+zcat 1294_S1_L008_R2_001.fastq.gz| grep -A1  --no-group-separator '+'| grep -v '+' | grep -o '.' | sort| uniq
+
+Result: #, -, 7, <, A, F
+I think that it would be reasonable to remove index reads that contain q-score '-', and '7'
+The same time, I would have to check if those quality scores affect the base calls by comparing
+index reads 1 and 2 if those reads are still matching then they could be kept regardless a low q-score
+
+Another approach would be to average q-scores for an index read and set up the q-score cuoff. 
+I want to be more stringent with the index reads, so I would set up the cutoff around 32
+
+After generating the python script for demultiplexing, I received the folloving results:
+
+|       |Count       |Percent  |
+|------ |------------|---------|
+|Total  |   363246735|   100.00|
+|Matched| 331755033  |    91.33|
+Index Hopped| 707740 |   0.19  |
+Unknown| 30783962    |     8.47|
+
+For running this script, I requested 1 CPU and 32GB of memory
+time -v output:
+ User time (seconds): 3157.87
+        System time (seconds): 82.62
+        Percent of CPU this job got: 73%
+        Elapsed (wall clock) time (h:mm:ss or m:ss): 1:13:21
+
+Implement later: optional q-score cutoff using argparse. Right now I am filtering for
+'N's only, but it would be great to have an option to set up the cuoff depending on
+overall data quality. 

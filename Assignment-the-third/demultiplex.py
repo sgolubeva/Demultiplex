@@ -1,7 +1,12 @@
 #!/usr/bin/env python
+"""The purpose of this script is iterate over illumina reads and place 
+them into three categories depending on the index reads. One category is 
+matched reads which means that index1 and index 2 match each other with index 2 being
+a reverse compliment of index 1. Second category is index hopped: index 1 and 2 don't match,
+but they are represented in the list of indexes. Third category is unmatched indexes: indexes that 
+contain 'N's or indexes not represented in the list of indexes"""
 import argparse
 import gzip
-import bioinfo
 import itertools
 import matplotlib.pyplot as plt
 
@@ -81,10 +86,12 @@ if __name__ == "__main__":
     file_handle_dict['unknown'] = (open(f'R1_unknown.fq', 'w'), open(f'R4_unknown.fq', 'w'))
     file_handle_dict['index_hopped'] = (open(f'R1_index_hopped.fq', 'w'), open(f'R4_index_hopped.fq', 'w'))
 
+    #populate the dic gandling index hopped counts
     combinations = itertools.permutations(index_list, 2)# get all possible index combinations
     for comb in combinations: # populate dict with all possible combinations
         index_comb_dict[comb] = 0
 
+    #read read1, read2, read3, read4 files
     with gzip.open(read1, 'rt') as fh1, gzip.open(read2, 'rt') as fh2, gzip.open(read3, 'rt') as fh3, gzip.open(read4, 'rt') as fh4:
         while True:
             r1 = process_record(fh1)
@@ -94,10 +101,9 @@ if __name__ == "__main__":
 
             #break the while true loop when process_record returns an empty list
             if r4 == []:
-                for index in file_handle_dict:
+                for index in file_handle_dict:# close file handles for 52 files
                     for fh in file_handle_dict[index]:
                         fh.close()
-                print(f'{match_count=}')
                 break
             rev_R3 = rev_compliment(r3[1])# reverse compliment read 3
 
@@ -115,7 +121,7 @@ if __name__ == "__main__":
                 hop_count += 1
                 total_rec_count += 1
                 index_comb_dict[(r2[1], rev_R3)] += 1
-            else:
+            else: #the rest of indexes are unknown
                 write_file(file_handle_dict['unknown'], r2[1], rev_R3, r1, r4)
                 unkn_count += 1
                 total_rec_count += 1
