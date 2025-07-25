@@ -79,7 +79,7 @@ if __name__ == "__main__":
     # create a dictionary with indexes as keys and file handles as tuples
     with open ('indexes.txt', 'r') as fh: # add indexes as keys 
         for index in fh:
-            index = index[:8]
+            index = index.strip().split("\t")[0]
             index_list.append(index)
             match_count[index] = 0
             file_handle_dict[index] = (open(f'R1_{index}_matching.fq', 'w'), open(f'R4_{index}_matching.fq', 'w'))
@@ -130,15 +130,27 @@ if __name__ == "__main__":
     with open('matched_percents.tsv', 'w') as mp, open('general_stats.tsv', 'w') as gs, open('index_hopped_stats.tsv','w') as ih:
         mp.write(f'Index\tCount\tPercent of total\tPercent of matched\n')
         for match in match_count:
-            mp.write(f'{match}\t{match_count[match]}\t{(match_count[match]*100)/total_rec_count: .2f}\t{(match_count[match]*100)/matched_number: .2f}\n')
+            if matched_number > 0:
+                mp.write(f'{match}\t{match_count[match]}\t{(match_count[match]*100)/total_rec_count: .2f}\t{(match_count[match]*100)/matched_number: .2f}\n')
+            else:
+                mp.write(f'{match}\t{match_count[match]}\t{(match_count[match]*100)/total_rec_count: .2f}\t0.00\n')
 
         gs.write(f'\tCount\tPercent\n')
-        gs.write(f'Total\t{total_rec_count}\t{(total_rec_count*100)/total_rec_count: .2f}\n')
-        gs.write(f'Matched\t{matched_number}\t{(matched_number*100)/total_rec_count: .2f}\n')
-        gs.write(f'Index Hopped\t{hop_count}\t{(hop_count*100)/total_rec_count: .2f}\n')
-        gs.write(f'Unknown\t{unkn_count}\t{(unkn_count*100)/total_rec_count: .2f}\n')
+        if total_rec_count > 0:
+            gs.write(f'Total\t{total_rec_count}\t{(total_rec_count*100)/total_rec_count: .2f}\n')
+            gs.write(f'Matched\t{matched_number}\t{(matched_number*100)/total_rec_count: .2f}\n')
+            gs.write(f'Index Hopped\t{hop_count}\t{(hop_count*100)/total_rec_count: .2f}\n')
+            gs.write(f'Unknown\t{unkn_count}\t{(unkn_count*100)/total_rec_count: .2f}\n')
+        else:
+            gs.write(f'Total\t0\t0.00\n')
+            gs.write(f'Matched\t0\t0.00\n')
+            gs.write(f'Index Hopped\t0\t0.00\n')
+            gs.write(f'Unknown\t0\t0.00\n')
 
         ih.write('Combination\tCount\tPercent\n')
         for combination in index_comb_dict:
-            ih.write(f'{combination}\t{index_comb_dict[combination]}\t{(index_comb_dict[combination]*100)/hop_count: .2f}\n')
+            if hop_count > 0:
+                ih.write(f'{combination}\t{index_comb_dict[combination]}\t{(index_comb_dict[combination]*100)/hop_count: .2f}\n')
+            else:
+                ih.write(f'{combination}\t{index_comb_dict[combination]}\t0.00\n')
     
